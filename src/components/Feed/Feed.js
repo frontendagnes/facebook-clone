@@ -4,9 +4,10 @@ import StoryReel from '../StoryReel/StoryReel'
 import MessageSender from '../MessageSender/MessageSender'
 import Post from '../Post/Post'
 import db from '../utility/firebase'
-
+import UploadImage from '../UploadImage/UploadImage'
 
 function Feed() {
+
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
@@ -25,9 +26,11 @@ function Feed() {
         <div className="feed">
             <StoryReel />
             <MessageSender />
+            <UploadImage  />
             {posts.map((post) => (
             <Post 
                 id={post.id}
+                postId={post.id}
                 profilePic={post.data.profilePic}
                 message={post.data.message}
                 timestamp={post.data.timestamp}

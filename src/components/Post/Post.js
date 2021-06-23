@@ -11,13 +11,29 @@ import CommentContentSender from '../CommentContentSender/CommentContentSender'
 import db from '../utility/firebase'
 // import { useStateValue } from '../utility/StateProvider'
 
-function Post({profilePic, image, username, timestamp, message, id, thumb}) {
+function Post({postId, profilePic, image, username, timestamp, message, id, thumb}) {
 
     // const [{ user }, dispatch] = useStateValue()
     const [isVisible, setIsVisible] = useState(false)
     const [like, setLike] = useState(thumb)
     const [boolLike, setBoolLike] = useState(false)
- 
+    const [comments, setComments] = useState([])
+
+    useEffect(() => {
+        let unsubscribe
+        if (postId) {
+            unsubscribe = db
+                .collection("posts")
+                .doc(postId)
+                .collection("comments")
+                .onSnapshot((snapshot) => {
+                    setComments(snapshot.docs.map((doc) => doc.data()))
+                })
+        }
+        return () => {
+            unsubscribe()
+        }
+    }, [postId])
 
     const onClickAdd = () => {
         setIsVisible(!isVisible)
@@ -78,7 +94,15 @@ function Post({profilePic, image, username, timestamp, message, id, thumb}) {
                 </div>  
             </div> 
             <div className="post__commentContent">
-                { isVisible && <CommentContentSender /> }
+                { isVisible && <CommentContentSender postId={postId} /> }
+                <div className="post__coments">
+                    {comments.map((comment) => (
+                        <p>
+                            <span>{ comment.timestamp }</span>
+                            <b>{comment.user}</b> {comment.text}
+                        </p>
+                    ))}
+                </div>
             </div>
             
         </div>
