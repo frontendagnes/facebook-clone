@@ -1,0 +1,22 @@
+.commentContentSender{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 20px;
+}
+.commentContentSender > form{
+    padding-left: 10px;
+    
+    flex: 1;
+}
+.commentContentSender > form > input{
+    width: 90%;
+    background-color: #f0f2f5;
+    border-radius: 999px;
+    padding: 10px 20px;
+    border: transparent;
+    outline-width: 0;
+}
+.commentContentSender > form > button{
+    display: none;
+}
