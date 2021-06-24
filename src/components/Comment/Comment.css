@@ -1,18 +1,28 @@
 .comment{
-    display: flex; 
-    margin-top: 10px; 
+    display: flex;
+    align-items: center;
+    margin-top: 5px; 
 }
 
-.comment__top{
+.comment__conntent{
     display: flex;
     flex-flow: column wrap;
-    margin-left: 10px;
-    border-radius: 999px;
+    margin-left: 5px;
+    border-radius: 30px;
     background-color: #f0f2f5;
     padding: 10px 20px;
 }
 
 .comment__user{
     font-weight: bolder;
-    font-size: small;
+    font-size: medium;
+    margin-right: 5px;
+}
+.comment__top{
+    display: flex;
+    flex-flow: column wrap;
+    margin-bottom: 5px;
+}
+.comment__small{
+    font-size: 10px;
 }

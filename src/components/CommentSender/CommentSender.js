@@ -1,35 +1,43 @@
 import React, { useState } from 'react'
-import './CommentContentSender.css'
+import './CommentSender.css'
 import { Avatar } from '@material-ui/core';
 import { useStateValue } from '../utility/StateProvider'
-import db from "../utility/firebase"
-import firebase from "firebase"
-function CommentContentSender( {postId} ) {
+import { Button } from '@material-ui/core';
+import db from '../utility/firebase';
+
+function CommentSender( {postId} ) {
+    
     const [{ user }, dispatch] = useStateValue()
     const [comment, setComment] = useState('')
 
     const postComment = e => {
         e.preventDefault()
+        if(comment){
         db.collection("posts").doc(postId).collection("comments").add({
             text: comment,
             user: user.displayName,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            avatar: user.photoURL,
+            timestamp: Date.now(),
         })
+        }
         setComment('')
     }
     return (
-        <div className="commentContentSender">
+        <div className="commentSender">
             <Avatar src={user.photoURL} />
             <form>
                 <input 
-                    placeholder="Write a comment (not working)"
+                    placeholder="Write a comment..."
                     value={comment}
                     onChange={e => setComment(e.target.value)}
                 />
-                <button onClick={postComment} type="button">Post</button>
+                <Button 
+                    onClick={postComment} 
+                    className="commentSender__button"
+                >Send </Button>
             </form>
         </div>
     )
 }
 
-export default CommentContentSender
+export default CommentSender

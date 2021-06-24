@@ -1,19 +1,22 @@
-import React from 'react'
-import './Comment.css'
-import { Avatar } from '@material-ui/core'
+import React from "react";
+import "./Comment.css";
+import { Avatar } from "@material-ui/core";
 
-const Comment = ({ content, profilePic, userName }) => {
-   
-    return (
-        <div className="comment">
-            <Avatar src={profilePic} />
-            <div className="comment__top">
-                <div className="comment__user">{userName}</div>
-                <span>{content}</span>
-            </div>
-            
+const Comment = ({ content, profilePic, userName, date }) => {
+  return (
+    <div className="comment">
+      <Avatar src={profilePic} />
+      <div className="comment__conntent">
+        <div className="comment__top">
+          <small className="comment__small">{date}</small>
+          <div className="comment__user">{userName}</div>
         </div>
-    )
-}
+        <div className="comment__bottom">
+          <div>{content}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default Comment
+export default Comment;
