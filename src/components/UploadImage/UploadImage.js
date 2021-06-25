@@ -79,7 +79,8 @@ function UploadImage() {
           />
         </div>
         <div className="uploadImage__buttons">
-          <input type="file" onChange={handleChange} />
+            <Button type="button" className="uploadImage__inputButton">Wybierz zdjęcie</Button>
+          <input className="uploadImage__inputFile" type="file" onChange={handleChange} />
           <Button onClick={handleUpload}>Upload photo</Button>
         </div>
       </div>

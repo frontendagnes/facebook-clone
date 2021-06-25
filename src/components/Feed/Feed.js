@@ -25,7 +25,6 @@ function Feed() {
     return (
         <div className="feed">
             <StoryReel />
-            <div>Dwie wersje sendera jedna </div>
             <MessageSender />
             <UploadImage  />
             {posts.map((post) => (

@@ -36,6 +36,7 @@
     background-color: #eff2f5;
 }
 .uploadImage__buttons{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,4 +70,16 @@
 .uploadImage__option:hover{
     background-color: #eff2f5;
     border-radius: 20px;
+}
+
+.uploadImage__inputFile{
+    z-index:2;
+    opacity: 0.2;
+    position: absolute;
+    left: 0;
+}
+
+.uploadImage__inputButton{
+    position: absolute;
+    left: 0;
 }
