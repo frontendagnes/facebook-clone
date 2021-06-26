@@ -17,13 +17,13 @@ import { actionTypes } from '../utility/reducer'
 function Header() {
 
     const [{ user }, dispatch] = useStateValue()
+
     const Logout = () => {
        console.log("logout")
         dispatch({
             type: actionTypes.DELETE_USER,
             user: null,
         })
-        console.log("user", user)
     }
     return (
         <div className = "header">

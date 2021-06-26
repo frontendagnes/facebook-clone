@@ -10,28 +10,22 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CommentSender from "../CommentSender/CommentSender";
 import db from "../utility/firebase";
 import Comment from "../Comment/Comment";
-// import { useStateValue } from '../utility/StateProvider'
+import { useStateValue } from "../utility/StateProvider";
 import moment from "moment";
-function Post({
-  postId,
-  profilePic,
-  image,
-  username,
-  timestamp,
-  message,
-  id,
-  thumb,
-}) {
-  // const [{ user }, dispatch] = useStateValue()
+import CurrencyFormat from "react-currency-format";
+import { getLikeTotal, getLikeElement } from "../utility/reducer";
+function Post({ postId, profilePic, image, username, timestamp, message, id }) {
+  const [{ user }, dispatch] = useStateValue();
+
   const [isVisible, setIsVisible] = useState(false);
-  const [like, setLike] = useState(thumb);
-  const [boolLike, setBoolLike] = useState(false);
+  const [like, setLike] = useState([]);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    let unsubscribe;
+    let comments;
+    let likes;
     if (postId) {
-      unsubscribe = db
+      comments = db
         .collection("posts")
         .doc(postId)
         .collection("comments")
@@ -40,33 +34,48 @@ function Post({
           setComments(snapshot.docs.map((doc) => doc.data()));
         });
     }
+    if (postId) {
+      likes = db
+        .collection("posts")
+        .doc(postId)
+        .collection("likes")
+        .onSnapshot((snapshot) => {
+          setLike(snapshot.docs.map(doc =>({
+            id: doc.id,
+            data: doc.data()
+          }) ))
+        });
+    }
+
     return () => {
-      unsubscribe();
+      comments();
+      likes();
     };
   }, [postId]);
 
-  const onClickAdd = () => {
+  const onClickAddComment = () => {
     setIsVisible(!isVisible);
   };
-  const incrementLike = async () => {
-    setLike(like + 1);
-    await db
-      .collection("posts")
-      .doc(id)
-      .update({
-        likes: like + 1,
-      });
-    setBoolLike(true);
+
+  const addLike = (e) => {
+    e.preventDefault();
+    db.collection("posts").doc(postId).collection("likes").add({
+      id: user.uid,
+      user: user.displayName,
+      like: 1,
+    });
   };
-  const decrementLike = async () => {
-    setLike(like - 1);
-    await db
-      .collection("posts")
-      .doc(id)
-      .update({
-        likes: like - 1,
-      });
-    setBoolLike(false);
+  const removeLike = () => {
+     db.collection("posts")
+      .doc(postId)
+      .collection("likes")
+      .doc(like.id)
+      .delete()
+        .then(() => console.log("like usunięto"))
+        .catch((error) => {
+          console.log("Błąd usunięci like", error)
+        })
+        
   };
   return (
     <div className="post">
@@ -84,18 +93,55 @@ function Post({
         <img src={image} alt="" />
       </div>
       <div className="post__options">
-        {boolLike ? (
-          <div className="post__option" onClick={decrementLike}>
+      {/* {like.map((item) => (
+      //  item.data.id === user.uid &&
+      //   <div className="post__option" onClick={removeLike(item.id)}>
+      //       <ThumbDownIcon />
+      //       <p>Like</p> <span className="post__like"></span>
+      //       <p>{like.length}</p>
+      //     </div>
+            
+      //     // <div className="post__option" onClick={addLike}>
+      //     //   <ThumbUpIcon />
+      //     //   <p>Like</p> <span className="post__like"></span>
+      //     //   <p>{like.length}</p>
+      //     // </div>
+  
+      ))} */}
+        {
+        getLikeElement(like, user) ? (
+          <div className="post__option" onClick={() =>
+
+              removeLike()
+  
+          }>
             <ThumbDownIcon />
-            <p>Like</p> <span className="post__like">{like}</span>
+            <p>Like</p> <span className="post__like"></span>
+            <CurrencyFormat
+              renderText={(value) => (
+                <div className="post__optionLike">{value}</div>
+              )}
+              decimalScale={2}
+              value={getLikeTotal(like)}
+              displayType={"text"}
+            />
           </div>
         ) : (
-          <div className="post__option" onClick={incrementLike}>
+          <div className="post__option" onClick={addLike}>
             <ThumbUpIcon />
-            <p>Like</p> <span className="post__like">{like}</span>
+            <p>Like</p> <span className="post__like"></span>
+            <CurrencyFormat
+              renderText={(value) => (
+                <div className="post__optionLike">{value}</div>
+              )}
+              decimalScale={2}
+              value={getLikeTotal(like)}
+              displayType={"text"}
+            />
           </div>
         )}
-        <div className="post__option" onClick={onClickAdd}>
+
+        <div className="post__option" onClick={onClickAddComment}>
           <ModeCommentIcon />
           <p>Comment</p>
         </div>

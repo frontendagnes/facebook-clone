@@ -4,7 +4,6 @@ import StoryReel from '../StoryReel/StoryReel'
 import MessageSender from '../MessageSender/MessageSender'
 import Post from '../Post/Post'
 import db from '../utility/firebase'
-import UploadImage from '../UploadImage/UploadImage'
 
 function Feed() {
 
@@ -18,7 +17,6 @@ function Feed() {
                     id: doc.id,
                     data: doc.data()
                 })))
-            
         })
     }, [])
 
@@ -26,7 +24,6 @@ function Feed() {
         <div className="feed">
             <StoryReel />
             <MessageSender />
-            <UploadImage  />
             {posts.map((post) => (
             <Post 
                 id={post.id}
@@ -37,7 +34,6 @@ function Feed() {
                 username={post.data.username}
                 image={post.data.image}
                 key={post.id}
-                thumb={post.data.likes}
             />
             )
             )}
