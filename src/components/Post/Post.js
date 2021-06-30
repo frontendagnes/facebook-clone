@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Post.css";
 import { Avatar } from "@material-ui/core";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ModeCommentIcon from "@material-ui/icons/ModeComment";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -12,18 +12,16 @@ import db from "../utility/firebase";
 import Comment from "../Comment/Comment";
 import { useStateValue } from "../utility/StateProvider";
 import moment from "moment";
-import CurrencyFormat from "react-currency-format";
-import { getLikeTotal, getLikeElement } from "../utility/reducer";
-function Post({ postId, profilePic, image, username, timestamp, message, id }) {
+ 
+function Post({ thumb, postId, profilePic, image, username, timestamp, message}) {
   const [{ user }, dispatch] = useStateValue();
 
+  const [like, setLike] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [like, setLike] = useState([]);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
     let comments;
-    let likes;
     if (postId) {
       comments = db
         .collection("posts")
@@ -34,49 +32,46 @@ function Post({ postId, profilePic, image, username, timestamp, message, id }) {
           setComments(snapshot.docs.map((doc) => doc.data()));
         });
     }
-    if (postId) {
-      likes = db
+    let thumb
+    if(postId){
+      thumb = db
         .collection("posts")
         .doc(postId)
-        .collection("likes")
-        .onSnapshot((snapshot) => {
-          setLike(snapshot.docs.map(doc =>({
-            id: doc.id,
-            data: doc.data()
-          }) ))
-        });
+        .onSnapshot((snapshot) =>{
+          setLike(snapshot.docs.likes)
+        })
     }
-
+    console.log("thumb",postId, like)
     return () => {
-      comments();
-      likes();
+      comments()
+      thumb()
     };
   }, [postId]);
 
   const onClickAddComment = () => {
     setIsVisible(!isVisible);
   };
+  const addLike = () => {
+    console.log("like++",like)
+    setLike(like + 1);
+    localStorage.setItem(`isLikes-${user.uid}`, "true");
+    localStorage.setItem(`postLike-${postId}`, "true");
 
-  const addLike = (e) => {
-    e.preventDefault();
-    db.collection("posts").doc(postId).collection("likes").add({
-      id: user.uid,
-      user: user.displayName,
-      like: 1,
+    db.collection("posts").doc(postId).update({
+      likes: like,
     });
   };
   const removeLike = () => {
-     db.collection("posts")
-      .doc(postId)
-      .collection("likes")
-      .doc(like.id)
-      .delete()
-        .then(() => console.log("like usunięto"))
-        .catch((error) => {
-          console.log("Błąd usunięci like", error)
-        })
-        
+    console.log("like--",like)
+    setLike(like - 1);
+    localStorage.setItem(`isLikes-${user.uid}`, "false");
+    localStorage.setItem(`postLike-${postId}`, "false");
+
+    db.collection("posts").doc(postId).update({
+      likes: like,
+    });
   };
+
   return (
     <div className="post">
       <div className="post__top">
@@ -93,51 +88,16 @@ function Post({ postId, profilePic, image, username, timestamp, message, id }) {
         <img src={image} alt="" />
       </div>
       <div className="post__options">
-      {/* {like.map((item) => (
-      //  item.data.id === user.uid &&
-      //   <div className="post__option" onClick={removeLike(item.id)}>
-      //       <ThumbDownIcon />
-      //       <p>Like</p> <span className="post__like"></span>
-      //       <p>{like.length}</p>
-      //     </div>
-            
-      //     // <div className="post__option" onClick={addLike}>
-      //     //   <ThumbUpIcon />
-      //     //   <p>Like</p> <span className="post__like"></span>
-      //     //   <p>{like.length}</p>
-      //     // </div>
-  
-      ))} */}
-        {
-        getLikeElement(like, user) ? (
-          <div className="post__option" onClick={() =>
-
-              removeLike()
-  
-          }>
+        {localStorage.getItem(`isLikes-${user.uid}`) === "true" &&
+        localStorage.getItem(`postLike-${postId}`) === "true" ? (
+          <div className="post__option" onClick={removeLike}>
             <ThumbDownIcon />
-            <p>Like</p> <span className="post__like"></span>
-            <CurrencyFormat
-              renderText={(value) => (
-                <div className="post__optionLike">{value}</div>
-              )}
-              decimalScale={2}
-              value={getLikeTotal(like)}
-              displayType={"text"}
-            />
+            <p>Like {thumb}</p>
           </div>
         ) : (
           <div className="post__option" onClick={addLike}>
             <ThumbUpIcon />
-            <p>Like</p> <span className="post__like"></span>
-            <CurrencyFormat
-              renderText={(value) => (
-                <div className="post__optionLike">{value}</div>
-              )}
-              decimalScale={2}
-              value={getLikeTotal(like)}
-              displayType={"text"}
-            />
+            <p>Like {thumb}</p>
           </div>
         )}
 
@@ -159,6 +119,7 @@ function Post({ postId, profilePic, image, username, timestamp, message, id }) {
         <div className="post__coments">
           {comments.map((comment) => (
             <Comment
+              key={comment.id}
               content={comment.text}
               profilePic={comment.avatar}
               date={moment(comment.timestamp).format("MMM Do YY, h:mm:ss a")}
