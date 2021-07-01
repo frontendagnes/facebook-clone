@@ -16,7 +16,7 @@ import moment from "moment";
 function Post({ thumb, postId, profilePic, image, username, timestamp, message}) {
   const [{ user }, dispatch] = useStateValue();
 
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState(thumb);
   const [isVisible, setIsVisible] = useState(false);
   const [comments, setComments] = useState([]);
 
@@ -32,19 +32,8 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
           setComments(snapshot.docs.map((doc) => doc.data()));
         });
     }
-    let thumb
-    if(postId){
-      thumb = db
-        .collection("posts")
-        .doc(postId)
-        .onSnapshot((snapshot) =>{
-          setLike(snapshot.docs.likes)
-        })
-    }
-    console.log("thumb",postId, like)
     return () => {
       comments()
-      thumb()
     };
   }, [postId]);
 
@@ -52,23 +41,21 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
     setIsVisible(!isVisible);
   };
   const addLike = () => {
-    console.log("like++",like)
     setLike(like + 1);
     localStorage.setItem(`isLikes-${user.uid}`, "true");
     localStorage.setItem(`postLike-${postId}`, "true");
 
     db.collection("posts").doc(postId).update({
-      likes: like,
+      likes: like +1,
     });
   };
   const removeLike = () => {
-    console.log("like--",like)
     setLike(like - 1);
     localStorage.setItem(`isLikes-${user.uid}`, "false");
     localStorage.setItem(`postLike-${postId}`, "false");
 
     db.collection("posts").doc(postId).update({
-      likes: like,
+      likes: like -1 ,
     });
   };
 
@@ -92,12 +79,12 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
         localStorage.getItem(`postLike-${postId}`) === "true" ? (
           <div className="post__option" onClick={removeLike}>
             <ThumbDownIcon />
-            <p>Like {thumb}</p>
+            <p>Like {like}</p>
           </div>
         ) : (
           <div className="post__option" onClick={addLike}>
             <ThumbUpIcon />
-            <p>Like {thumb}</p>
+            <p>Like {like}</p>
           </div>
         )}
 
