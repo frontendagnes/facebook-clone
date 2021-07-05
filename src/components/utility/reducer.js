@@ -1,8 +1,6 @@
 export const initialState = {
   user: null,
-  likes: [
-
-  ],
+  likes: [],
 };
 //Selector sum of the prices in the like
 export const getLikeTotal = (likes) =>
@@ -16,6 +14,7 @@ export const actionTypes = {
   DELETE_USER: "DELETE_USER",
   ADD_LIKE: "ADD_LIKE",
   REMOVE_LIKE: "REMOVE_LIKE",
+  SET_LIKE: "SET_LIKE",
 };
 
 const reducer = (state, action) => {
@@ -30,6 +29,11 @@ const reducer = (state, action) => {
         ...state,
         user: null,
       };
+    case actionTypes.SET_LIKE:
+      return{
+        ...state,
+        likes: action.item
+      }
     case actionTypes.ADD_LIKE:
       return {
         ...state,

@@ -12,13 +12,25 @@ import db from "../utility/firebase";
 import Comment from "../Comment/Comment";
 import { useStateValue } from "../utility/StateProvider";
 import moment from "moment";
- 
-function Post({ thumb, postId, profilePic, image, username, timestamp, message}) {
+
+function Post({
+  thumb,
+  postId,
+  profilePic,
+  image,
+  username,
+  timestamp,
+  message,
+}) {
   const [{ user }, dispatch] = useStateValue();
 
-  const [like, setLike] = useState(thumb);
+  const [like, setLike] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    setLike(thumb);
+  }, []);
 
   useEffect(() => {
     let comments;
@@ -33,7 +45,7 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
         });
     }
     return () => {
-      comments()
+      comments();
     };
   }, [postId]);
 
@@ -41,22 +53,19 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
     setIsVisible(!isVisible);
   };
   const addLike = () => {
-    setLike(like + 1);
-    localStorage.setItem(`isLikes-${user.uid}`, "true");
-    localStorage.setItem(`postLike-${postId}`, "true");
-
+    let newLike = [...like, user.uid];
     db.collection("posts").doc(postId).update({
-      likes: like +1,
+      likes: newLike,
     });
+    setLike(newLike);
   };
-  const removeLike = () => {
-    setLike(like - 1);
-    localStorage.setItem(`isLikes-${user.uid}`, "false");
-    localStorage.setItem(`postLike-${postId}`, "false");
 
+  const removeLike = () => {
+    let filterItem = like.filter((item) => item !== user.uid);
     db.collection("posts").doc(postId).update({
-      likes: like -1 ,
+      likes: filterItem,
     });
+    setLike(filterItem);
   };
 
   return (
@@ -75,16 +84,15 @@ function Post({ thumb, postId, profilePic, image, username, timestamp, message})
         <img src={image} alt="" />
       </div>
       <div className="post__options">
-        {localStorage.getItem(`isLikes-${user.uid}`) === "true" &&
-        localStorage.getItem(`postLike-${postId}`) === "true" ? (
-          <div className="post__option" onClick={removeLike}>
-            <ThumbDownIcon />
-            <p>Like {like}</p>
+        {like.includes(user.uid) ? (
+          <div className="post__option" onClick={() => removeLike()}>
+            <ThumbUpIcon className="post__like" />
+            <p>Like {like?.length}</p>
           </div>
         ) : (
-          <div className="post__option" onClick={addLike}>
+          <div className="post__option" onClick={() => addLike()}>
             <ThumbUpIcon />
-            <p>Like {like}</p>
+            <p>Like {like?.length}</p>
           </div>
         )}
 

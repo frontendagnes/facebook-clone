@@ -23,7 +23,7 @@ function MessageSender() {
       profilePic: user.photoURL,
       username: user.displayName,
       image: imageURL,
-      likes: 0,
+      likes: [],
     });
     setInput("");
     setImageUrl("");
@@ -68,7 +68,7 @@ function MessageSender() {
                 profilePic: user.photoURL,
                 username: user.displayName,
                 image: url,
-                likes: 0,
+                likes: [],
               });
               setProgress(0);
               setInput("");
