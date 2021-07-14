@@ -1,6 +1,6 @@
 # Fecebook Fake Clone
 
-Klon facebook.  Logowanie za pomocą konta google. W fazie rozwoju jest system like obecnie zapamiętują użytkownika tylko na jednym urządzeniu. 
+Klon facebook.  Logowanie za pomocą konta google. W apilkacji można dodac post komentarze oraz like.
 
 ## Documentation
 Projekt został stworzone przez [create-react-app](https://github.com/facebook/create-react-app), w aplikacji zostały użyte następujące rozwiązania:
