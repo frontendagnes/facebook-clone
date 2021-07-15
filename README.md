@@ -1,4 +1,4 @@
-# Fecebook Fake Clone
+# SocialApp / Fecebook Fake Clone
 
 Klon facebook.  Logowanie za pomocą konta google. W apilkacji można dodac posty, komentarze oraz like.
 

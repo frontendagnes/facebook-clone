@@ -28,7 +28,9 @@ function Header() {
     return (
         <div className = "header">
             <div className = "header__left">
-                <i className="fab fa-facebook"></i>
+                <div className="header__logo">
+                    SocialApp
+                </div>
                 <div className="header__input">
                     <SearchIcon />
                     <input type="text" placeholder="Search Facebook"/>

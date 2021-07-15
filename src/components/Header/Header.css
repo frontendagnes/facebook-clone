@@ -11,6 +11,11 @@
 .header__left{
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
+}
+.header__logo{
+    font-size: 24px;
+    font-weight: 600;
 }
 .header__input{
     display: flex;
