@@ -13,17 +13,13 @@ import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useStateValue } from '../utility/StateProvider'
-import { actionTypes } from '../utility/reducer'
+import { auth } from '../utility/firebase';
 function Header() {
 
     const [{ user }, dispatch] = useStateValue()
 
     const Logout = () => {
-       console.log("logout")
-        dispatch({
-            type: actionTypes.DELETE_USER,
-            user: null,
-        })
+        auth.signOut()
     }
     return (
         <div className = "header">

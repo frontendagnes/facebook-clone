@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Post.css";
 import { Avatar } from "@material-ui/core";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ModeCommentIcon from "@material-ui/icons/ModeComment";
 import NearMeIcon from "@material-ui/icons/NearMe";
@@ -30,7 +29,7 @@ function Post({
 
   useEffect(() => {
     setLike(thumb);
-  }, []);
+  }, [thumb]);
 
   useEffect(() => {
     let comments;
