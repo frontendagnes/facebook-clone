@@ -1,6 +1,6 @@
 # SocialApp / Fecebook Fake Clone
 
-Klon facebook.  Logowanie za pomocą konta google. W apilkacji można dodac posty, komentarze oraz like.
+Klon facebook.  Logowanie za pomocą konta google. W apilkacji można dodać posty, komentarze oraz like. Rozponawanie czy użytkowanik kliknął już like zostało wykonane na podstawie tablicy która gromadzi id użytowników, tablica jest sprawdzana po kontem obecności zalogowanego użytkowanika co pozwala wyświtlić opowieni kolor ikonki. Układ strony został wykonany za pomocą flexbox.
 
 ## Documentation
 Projekt został stworzone przez [create-react-app](https://github.com/facebook/create-react-app), w aplikacji zostały użyte następujące rozwiązania:
