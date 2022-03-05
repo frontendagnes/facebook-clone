@@ -37,8 +37,8 @@ Wszystkie pozostałe niezbędne informację znajdują się tutaj: [create-react-
 
 
 ## Contribute
-* Source Code: https://github.com/zabula81/facebook-clone
-* Issue Tracker: https://github.com/zabula81/facebook-clone/issues
+* Source Code: https://github.com/frontendagnes/facebook-clone
+* Issue Tracker: https://github.com/frontendagnes/facebook-clone/issues
 * View: https://facebook-clone-74351.web.app/
 
 ## Author
