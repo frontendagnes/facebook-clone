@@ -42,7 +42,7 @@ Wszystkie pozostałe niezbędne informację znajdują się tutaj: [create-react-
 * View: https://facebook-clone-74351.web.app/
 
 ## Author
-Agnieszka Kamińska (agnieszka.kaminska@ksiegarnia.edu.pl)
+[frontend-agnes](https://frontend-agnes.pl/)
 
 
 

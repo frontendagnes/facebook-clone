@@ -16,6 +16,8 @@
 .messageSender__top > form{
     flex: 1;
     display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 .messageSender__top > form > input{
     outline-width: 0;
@@ -24,14 +26,17 @@
     margin: 0 10px;
     border-radius: 999px;
     background-color: #eff2f5;
+    height: 25px;
 }
 
 .messageSender__top > form > button{
     display: none;
 }
-
+.messageSender__top > form > svg{
+    cursor: pointer;
+}
 .massegeSender__input{
-    flex: 1;
+    flex: 1;   
 }
 .messageSender__bottom{
     display: flex;

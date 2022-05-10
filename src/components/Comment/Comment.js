@@ -1,6 +1,6 @@
 import React from "react";
 import "./Comment.css";
-import { Avatar } from "@material-ui/core";
+import Avatar from '@mui/material/Avatar'
 
 const Comment = ({ content, profilePic, userName, date }) => {
   return (

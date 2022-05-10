@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from "react";
 import "./Feed.css";
+import db, {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from "../utility/firebase";
+//mui
 import StoryReel from "../StoryReel/StoryReel";
 import MessageSender from "../MessageSender/MessageSender";
 import Post from "../Post/Post";
-import db from "../utility/firebase";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    db.collection("posts")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        setPosts(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
-        );
-      });
+    const ref = collection(db, "posts");
+    const sortRef = query(ref, orderBy("timestamp", "desc"));
+    const unsuscribe = onSnapshot(sortRef, (snapshot) => {
+      setPosts(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    });
+
+    return () => {
+      unsuscribe();
+    };
   }, []);
 
   return (

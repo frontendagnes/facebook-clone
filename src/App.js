@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 
 import { useStateValue } from "./components/utility/StateProvider";
-import { auth } from "./components/utility/firebase";
+import { auth, onAuthStateChanged } from "./components/utility/firebase";
 //components
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -13,7 +13,7 @@ import Login from "./components/Login/Login";
 function App() {
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
+    const authUser = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         dispatch({
           type: "SET_USER",
@@ -25,9 +25,12 @@ function App() {
         });
       }
     });
+
+    return () => {
+      authUser();
+    };
   }, [dispatch]);
   return (
-    //BEM nameing convention
     <div className="app">
       {!user ? (
         <Login />

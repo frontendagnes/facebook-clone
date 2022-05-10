@@ -1,22 +1,70 @@
-import firebase from 'firebase'
-// import firebase from "firebase/app";
-import 'firebase/database'; 
-import 'firebase/storage';
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  onSnapshot,
+  collection,
+  doc,
+  orderBy,
+  query,
+  setDoc,
+  addDoc,
+  increment,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
+import { signInWithPopup, GoogleAuthProvider, getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
+
+// const firebaseConfig = {
+//     apiKey: process.env.REACT_API_KEY,
+//     authDomain: process.env.REACT_AUTH_DOMAIN,
+//     projectId: process.env.REACT_PROJECT_ID,
+//     storageBucket: process.env.REACT_STORAGE_BUCKET,
+//     messagingSenderId: process.env.REACT_MESSAGING_SENDER_ID,
+//     appId: process.env.REACT_APP_ID
+//   };
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDEpsZ3IRsHf0zBrV0TWVqAvZNneNItq8M",
-    authDomain: "facebook-clone-74351.firebaseapp.com",
-    projectId: "facebook-clone-74351",
-    storageBucket: "facebook-clone-74351.appspot.com",
-    messagingSenderId: "922292235845",
-    appId: "1:922292235845:web:3b42166e7f64d7b2f2bd2c"
-  };
+  apiKey: "AIzaSyDEpsZ3IRsHf0zBrV0TWVqAvZNneNItq8M",
+  authDomain: "facebook-clone-74351.firebaseapp.com",
+  projectId: "facebook-clone-74351",
+  storageBucket: "facebook-clone-74351.appspot.com",
+  messagingSenderId: "922292235845",
+  appId: "1:922292235845:web:3b42166e7f64d7b2f2bd2c",
+};
 
-const firebaseApp = firebase.initializeApp(firebaseConfig)
-const db = firebaseApp.firestore()
-const auth = firebase.auth()
-const provider = new firebase.auth.GoogleAuthProvider()
-const storage = firebase.storage()
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+const provider = new GoogleAuthProvider(firebaseApp);
+const storage = getStorage(firebaseApp);
 
-export { auth, provider, storage }
-export default db
+export { auth, provider, storage };
+export {
+  getFirestore,
+  onSnapshot,
+  collection,
+  doc,
+  orderBy,
+  query,
+  setDoc,
+  addDoc,
+  increment,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  signInWithPopup,
+  serverTimestamp,
+  onAuthStateChanged,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+};
+export default db;

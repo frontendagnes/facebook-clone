@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./Post.css";
-import { Avatar } from "@material-ui/core";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ModeCommentIcon from "@material-ui/icons/ModeComment";
-import NearMeIcon from "@material-ui/icons/NearMe";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import CommentSender from "../CommentSender/CommentSender";
-import db from "../utility/firebase";
-import Comment from "../Comment/Comment";
+import db, {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+} from "../utility/firebase";
 import { useStateValue } from "../utility/StateProvider";
 import moment from "moment";
+//mui
+import Avatar from "@mui/material/Avatar";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ModeCommentIcon from "@mui/icons-material/ModeComment";
+import NearMeIcon from "@mui/icons-material/NearMe";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// components
+import CommentSender from "../CommentSender/CommentSender";
+import Comment from "../Comment/Comment";
 
 function Post({
   thumb,
@@ -21,7 +30,7 @@ function Post({
   timestamp,
   message,
 }) {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const [like, setLike] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -32,39 +41,56 @@ function Post({
   }, [thumb]);
 
   useEffect(() => {
-    let comments;
     if (postId) {
-      comments = db
-        .collection("posts")
-        .doc(postId)
-        .collection("comments")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setComments(snapshot.docs.map((doc) => doc.data()));
-        });
+      const refDoc = doc(db, "posts", postId);
+      const ref = collection(refDoc, "comments");
+      const refSort = query(ref, orderBy("timestamp", "desc"));
+      const unsuscribe = onSnapshot(refSort, (snapshot) => {
+        setComments(snapshot.docs.map((doc) => doc.data()));
+      });
+      return () => {
+        unsuscribe();
+      };
     }
-    return () => {
-      comments();
-    };
   }, [postId]);
 
   const onClickAddComment = () => {
     setIsVisible(!isVisible);
   };
-  const addLike = () => {
+  const addLike = async () => {
     let newLike = [...like, user.uid];
-    db.collection("posts").doc(postId).update({
-      likes: newLike,
-    });
-    setLike(newLike);
+    const refDoc = doc(db, "posts", postId);
+    await setDoc(
+      refDoc,
+      {
+        likes: newLike,
+      },
+      { merge: true }
+    )
+      .then(() => {
+        setLike(newLike);
+      })
+      .catch((error) => {
+        console.error("Like Error>>", error.message);
+      });
   };
 
-  const removeLike = () => {
+  const removeLike = async () => {
     let filterItem = like.filter((item) => item !== user.uid);
-    db.collection("posts").doc(postId).update({
-      likes: filterItem,
-    });
-    setLike(filterItem);
+    const refDoc = doc(db, "posts", postId);
+    await setDoc(
+      refDoc,
+      {
+        likes: filterItem,
+      },
+      { merge: true }
+    )
+      .then(() => {
+        setLike(filterItem);
+      })
+      .catch((error) => {
+        console.error("Dislike Error>>", error.message);
+      });
   };
 
   return (
@@ -112,13 +138,14 @@ function Post({
         {isVisible && <CommentSender postId={postId} />}
         <div className="post__coments">
           {comments.map((comment) => (
-            <Comment
-              key={comment.id}
-              content={comment.text}
-              profilePic={comment.avatar}
-              date={moment(comment.timestamp).format("MMM Do YY, h:mm:ss a")}
-              userName={comment.user}
-            />
+            <div key={comment.id}>
+              <Comment
+                content={comment.text}
+                profilePic={comment.avatar}
+                date={moment(comment.timestamp).format("MMM Do YY, h:mm:ss a")}
+                userName={comment.user}
+              />
+            </div>
           ))}
         </div>
       </div>

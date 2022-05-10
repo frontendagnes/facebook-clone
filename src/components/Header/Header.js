@@ -1,22 +1,25 @@
 import React from 'react'
 import './Header.css'
-import SearchIcon from '@material-ui/icons/Search'
-import HomeIcon from '@material-ui/icons/Home';
-import FlagIcon from '@material-ui/icons/Flag';
-import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
-import StorefrontIcon from '@material-ui/icons/Storefront';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import { Avatar, IconButton} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import ForumIcon from '@material-ui/icons/Forum'
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useStateValue } from '../utility/StateProvider'
 import { auth } from '../utility/firebase';
+// mui
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import FlagIcon from '@mui/icons-material/Flag';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import IconButton from '@mui/material/IconButton'
+import Avatar from '@mui/material/Avatar'
+import AddIcon from '@mui/icons-material/Add';
+import ForumIcon from '@mui/icons-material/Forum'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
 function Header() {
 
-    const [{ user }, dispatch] = useStateValue()
+    const [{ user }] = useStateValue()
 
     const Logout = () => {
         auth.signOut()
