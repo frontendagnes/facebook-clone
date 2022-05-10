@@ -8,7 +8,9 @@ import TelegramIcon from "@mui/icons-material/Telegram";
 function Login() {
   // logowanie za pomocą google
   const signIn = () => {
-    signInWithPopup(auth, provider).catch((error) => console.log(error.message));
+    signInWithPopup(auth, provider).catch((error) =>
+      console.log("Login Google Error>>", error.message)
+    );
   };
 
   return (
@@ -17,9 +19,10 @@ function Login() {
         <p>SocialApp</p>
         <TelegramIcon style={{ fontSize: 86, color: "#1877f2" }} />
       </div>
-      <Button type="submit" onClick={signIn}>
+      <Button type="button" onClick={signIn}>
         Sign In with Google
       </Button>
+
     </div>
   );
 }

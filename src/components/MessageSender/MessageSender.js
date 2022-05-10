@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./MessageSender.css";
 import { useStateValue } from "../utility/StateProvider";
-// import firebase from 'firebase'
 import db, { addDoc, serverTimestamp, collection } from "../utility/firebase";
 //mui
 import AddCommentIcon from "@mui/icons-material/AddComment";
@@ -67,7 +66,7 @@ function MessageSender() {
             <AddCommentIcon
               onClick={handleSubmit}
               fontSize="large"
-              color="secondary"
+              sx={{ color: "#1877f2" }}
             />
           ) : null}
         </form>
