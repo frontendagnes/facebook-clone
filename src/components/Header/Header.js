@@ -1,7 +1,7 @@
 import React from 'react'
 import './Header.css'
 import { useStateValue } from '../utility/StateProvider'
-import { auth } from '../utility/firebase';
+import { auth, signOut } from '../utility/firebase';
 // mui
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,7 +22,7 @@ function Header() {
     const [{ user }] = useStateValue()
 
     const Logout = () => {
-        auth.signOut()
+        signOut(auth)
     }
     return (
         <div className = "header">

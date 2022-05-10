@@ -13,6 +13,9 @@ import Login from "./components/Login/Login";
 function App() {
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
+    console.log(process.env);
+  }, [])
+  useEffect(() => {
     const authUser = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         dispatch({
