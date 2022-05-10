@@ -37,15 +37,6 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDEpsZ3IRsHf0zBrV0TWVqAvZNneNItq8M",
-//   authDomain: "facebook-clone-74351.firebaseapp.com",
-//   projectId: "facebook-clone-74351",
-//   storageBucket: "facebook-clone-74351.appspot.com",
-//   messagingSenderId: "922292235845",
-//   appId: "1:922292235845:web:3b42166e7f64d7b2f2bd2c",
-// };
-
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
