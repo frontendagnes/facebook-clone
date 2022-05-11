@@ -46,7 +46,12 @@ function Post({
       const ref = collection(refDoc, "comments");
       const refSort = query(ref, orderBy("timestamp", "desc"));
       const unsuscribe = onSnapshot(refSort, (snapshot) => {
-        setComments(snapshot.docs.map((doc) => doc.data()));
+        setComments(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
       });
       return () => {
         unsuscribe();
@@ -138,14 +143,13 @@ function Post({
         {isVisible && <CommentSender postId={postId} />}
         <div className="post__coments">
           {comments.map((comment) => (
-            <div key={comment.id}>
-              <Comment
-                content={comment.text}
-                profilePic={comment.avatar}
-                date={moment(comment.timestamp).format("MMM Do YY, h:mm:ss a")}
-                userName={comment.user}
-              />
-            </div>
+            <Comment
+              key={comment.id}
+              content={comment.data.text}
+              profilePic={comment.data.avatar}
+              date={moment(comment.data.timestamp).format("MMM Do YY, h:mm:ss a")}
+              userName={comment.data.user}
+            />
           ))}
         </div>
       </div>
